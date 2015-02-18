@@ -62,7 +62,7 @@ public class Main {
 			store.put(new Random().nextInt(), (byte[]) obj);
 			System.out.println("putLarge() completed successfully");
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("file large.test not found");
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class Main {
 	}
 	
 	// Test concurrent put()
-	// t1 must wait until t0 completes even though t1 takes longer
+	// t1 must wait until t0 completes even though it takes longer
 	public static void multiPut() throws InterruptedException {
 		System.out.println("-----    multiPut()   -----");
 		Thread t0 = new Thread() { 
@@ -101,6 +101,7 @@ public class Main {
 		};
 
 		t0.start();
+		t0.join();
 		t1.start();
 		t1.join();
 	}
@@ -138,7 +139,7 @@ public class Main {
 			public void run() {
 				this.setName("t0");
 				putSimple(2);
-			}	
+			}
 		};
 
 		// get
