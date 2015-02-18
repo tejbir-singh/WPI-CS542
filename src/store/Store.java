@@ -13,7 +13,8 @@ public class Store implements Serializable {
 	private static final long serialVersionUID = -8534916903031691902L;
 	private static Store instance;
 	private Hashtable<Integer, byte[]> data;
-	private final String fileLocation = "store.store";
+	private static final String fileLocation = "store.store";
+	public final int testKey = 587276264;
 	
 	private Store() {
 		// first check if there is data to load
@@ -62,6 +63,13 @@ public class Store implements Serializable {
 	public void remove(int key) {
 		// ensure that only one thread can perform the action at any given time
 		synchronized(this) {
+			if (key == testKey) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 			data.remove(key);
 		}
 		saveContents();
@@ -79,4 +87,7 @@ public class Store implements Serializable {
 			e.printStackTrace();
 		}
 	}
+	
+	// Solely for testing purposes
+	protected void clearData() { this.data = new Hashtable<Integer, byte[]>(); }
 }
