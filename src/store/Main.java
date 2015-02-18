@@ -23,8 +23,8 @@ public class Main {
 		//putSimple(1);
 		//putSimple();
 		//putLarge();
-		multiPut();
-		//putAndGet();
+		//multiPut();
+		putAndGet();
 		
 		System.out.println("complete");
 	}
@@ -38,7 +38,7 @@ public class Main {
 	
 	public static void putTestArray(int key) {
 		byte[] value = "test multithreading".getBytes();
-		store.put(new Random().nextInt(), value);
+		store.put(key, value);
 	}
 	
 	// test put large (1 GB)
@@ -59,8 +59,8 @@ public class Main {
 	
 	// test concurrent use
 	public static void multiPut() {
-		Thread t1 = new Thread() { public void run() { putTestArray(new Random().nextInt()); } };
-		Thread t2 = new Thread() { public void run() { putSimple(new Random().nextInt()); } };
+		Thread t1 = new Thread() { public void run() { putTestArray(1); } };
+		Thread t2 = new Thread() { public void run() { putTestArray(1); } };
 		
 		t1.start();
 		//try {
@@ -78,9 +78,19 @@ public class Main {
 	
 	// could write a put and get for testing?
 	public static void putAndGet() {
-		Thread t1 = new Thread() { public void run() { putTestArray(new Random().nextInt()); } };
-		Thread t2 = new Thread() { public void run() { getSimple(); } };
-		
+		Thread t1 = new Thread() { 
+			public void run() {
+				putTestArray(new Random().nextInt());
+				System.out.println("t1 terminated and added " + "...");
+			}	 
+		};
+		Thread t2 = new Thread() { 
+			public void run() {
+				getSimple();
+				System.out.println("t2 terminated and got " + "...");
+			} 
+		};
+
 		t1.start();
 		t2.start();
 	}
