@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 public class Store implements Serializable {
@@ -41,13 +42,11 @@ public class Store implements Serializable {
 		synchronized(this) {
 			byte[] t = "test multithreading".getBytes();
 			
-			// TODO fix
 			// used to assert synchronization in tests
-			if (value.equals(t)) {
+			if (Arrays.equals(value, t)) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

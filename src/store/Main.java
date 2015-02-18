@@ -19,17 +19,7 @@ public class Main {
 			// do nothing
 		}
 		store = Store.getInstance();
-		/*byte[] value = new byte[1073741824];
-		new Random().nextBytes(value);
-		ObjectOutputStream objOut;
-		try {
-			objOut = new ObjectOutputStream(new FileOutputStream("large.test"));
-			// Write object out to disk
-			objOut.writeObject(value);
-			objOut.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+		
 		//putSimple(1);
 		//putSimple();
 		//putLarge();
