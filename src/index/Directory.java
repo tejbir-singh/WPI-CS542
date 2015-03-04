@@ -40,15 +40,37 @@ public class Directory {
 			}
 			location = rid.hashCode() % directory.size();
 			b = directory.get(location);
-			b.addToBucket(rid);
+			b.addToBucket(rid, attribValue);
 		}
 		else {				// the element will fit in the bucket
-			b.addToBucket(rid);
+			b.addToBucket(rid, attribValue);
 		}
 	}
 	
-	public void get(String attribValue) {
-		
+	public ArrayList<String> get(String attribValue) {
+		ArrayList<String> results = new ArrayList<String>();
+
+		int location = attribValue.hashCode() % directory.size();
+		Bucket b = directory.get(location);
+		// add the rid's which belong to results
+		for (IndexElement ie : b.getContents()) {
+			if (ie.attribValue == attribValue) {
+				results.add(ie.rid);
+			}
+		}
+		return results;
+	}
+	
+	public void remove(String rid) {
+		// brute force deletion?
+		for (Bucket b : directory) {
+			for (IndexElement ie : b.getContents()) {
+				if (ie.rid == rid) {
+					b.removeFromBucket(rid);
+					return;
+				}
+			}
+		}
 	}
 	
 	private void expand(Bucket bucket) {
@@ -63,12 +85,13 @@ public class Directory {
 			if (i == overflowedIndex + Math.pow(2, globalDepth-1)) {
 				Bucket b2 = new Bucket(bucket.getLocalDepth());
 				directory.add(b2);
-				redistribute(bucket);
 			}
+			
 			else {
 				directory.add(directory.get(i));
 			}
 		}
+		redistribute(bucket);
 	}
 	
 	private void splitBucket(Bucket bucket) {
@@ -82,11 +105,10 @@ public class Directory {
 	}
 	
 	private void redistribute(Bucket b1) {
-		String[] contents = b1.getContents();
-		b1.setContents(new String[Bucket.bucketSize]);
-		for (String rid : contents) {
-			// TODO: how do we get back the data_value that was originally used to hash?
-			// put(rid, ???);
+		IndexElement[] contents = b1.getContents();
+		b1.setContents(new IndexElement[Bucket.bucketSize]);
+		for (IndexElement e : contents) {
+			put(e.rid, e.attribValue);
 		}
 	}
 }

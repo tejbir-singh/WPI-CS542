@@ -2,17 +2,18 @@ package index;
 
 public class Bucket {
 	public static final int bucketSize = 4;
-	private String[] contents = new String[bucketSize];
+	private IndexElement[] contents = new IndexElement[bucketSize];
 	private int localDepth;
 	
 	public Bucket(int localDepth) {
 		this.localDepth = localDepth;
 	}
 	
-	public void addToBucket(String rid) {
+	public void addToBucket(String rid, String attribValue) {
+		IndexElement ie = new IndexElement(rid, attribValue);
 		for (int i = 0; i < contents.length; i++) {
 			if (contents[i] == null) {		// empty slot in the bucket
-				contents[i] = rid;
+				contents[i] = ie;
 				return;
 			}
 		}
@@ -20,7 +21,7 @@ public class Bucket {
 	
 	public void removeFromBucket(String rid) {
 		for (int i = 0; i < contents.length; i++) {
-			if (contents[i] == rid) {		// found the rid we are removing
+			if (contents[i].rid == rid) {		// found the rid we are removing
 				contents[i] = null;
 				return;
 			}
@@ -30,14 +31,14 @@ public class Bucket {
 	/**
 	 * @return the contents
 	 */
-	public String[] getContents() {
+	public IndexElement[] getContents() {
 		return contents;
 	}
 
 	/**
 	 * @param contents the contents to set
 	 */
-	public void setContents(String[] contents) {
+	public void setContents(IndexElement[] contents) {
 		this.contents = contents;
 	}
 	
@@ -49,4 +50,15 @@ public class Bucket {
 		this.localDepth++;
 	}
 }
+
+class IndexElement {
+	String rid;
+	String attribValue;
+	
+	public IndexElement(String rid, String attribValue) {
+		this.rid = rid;
+		this.attribValue = attribValue;
+	}
+}
+
 
