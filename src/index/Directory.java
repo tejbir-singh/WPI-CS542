@@ -5,13 +5,14 @@ import java.util.ArrayList;
 public class Directory {
 	private static Directory instance;
 	private static int globalDepth = 2;
+	private static int initialLocalDepth = 2;
 	private ArrayList<Bucket> directory;
 	
 	private Directory() {
 		directory = new ArrayList<Bucket>();
 		// initialize with initialGlobalDepth Buckets
 		for (int i = 0; i < Math.pow(2, globalDepth); i++) {
-			directory.add(new Bucket());
+			directory.add(new Bucket(initialLocalDepth));
 		}
 	}
 	
@@ -46,40 +47,46 @@ public class Directory {
 		}
 	}
 	
-	private void expand(Bucket b) {
-		int overflowedIndex = 0;
-		globalDepth++;
+	public void get(String attribValue) {
 		
-		for (int i = 0; i < directory.size(); i++) {
-			if (directory.get(i) == b) {
-				overflowedIndex = i;
-			}
-		}
+	}
+	
+	private void expand(Bucket bucket) {
+		int overflowedIndex = directory.indexOf(bucket);
+		globalDepth++;
+		bucket.incrementLocalDepth();
 		
 		for (int i = 0; i < Math.pow(2, globalDepth-1); i++) {
-			if (i == overflowedIndex + Math.pow(2, globalDepth-1)) {
-				Bucket b2 = new Bucket();
-				directory.add(b2);
-				redistribute(b);
-			}
-			// if it's the directory which overflowed, add a new
+			// if it's the location which overflowed, add a new bucket
 			// otherwise, add a reference to an old bucket
+
+			if (i == overflowedIndex + Math.pow(2, globalDepth-1)) {
+				Bucket b2 = new Bucket(bucket.getLocalDepth());
+				directory.add(b2);
+				redistribute(bucket);
+			}
 			else {
 				directory.add(directory.get(i));
 			}
 		}
-		
-		
-		// call splitBucket
 	}
 	
-	private void splitBucket(Bucket b) {
+	private void splitBucket(Bucket bucket) {
+		bucket.incrementLocalDepth();
+		// create a bucket at overflowedIndex + Math.pow(2, globalDepth-1)
+		Double newBucketIndex = directory.indexOf(bucket) + Math.pow(2, globalDepth-1);
+		directory.set(newBucketIndex.intValue(), new Bucket(bucket.getLocalDepth()));
 		
+		// redistribute items from the original bucket
+		redistribute(bucket);
 	}
 	
 	private void redistribute(Bucket b1) {
-		for (String rid : b1.getContents()) {
-			//put(rid);
+		String[] contents = b1.getContents();
+		b1.setContents(new String[Bucket.bucketSize]);
+		for (String rid : contents) {
+			// TODO: how do we get back the data_value that was originally used to hash?
+			// put(rid, ???);
 		}
 	}
 }

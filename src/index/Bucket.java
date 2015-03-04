@@ -1,11 +1,13 @@
 package index;
 
 public class Bucket {
-	private static final int maxBucketSize = 4;
-	private static final int initialLocalDepth = 2;
+	public static final int bucketSize = 4;
+	private String[] contents = new String[bucketSize];
+	private int localDepth;
 	
-	private String[] contents = new String[maxBucketSize];
-	private int localDepth = initialLocalDepth;
+	public Bucket(int localDepth) {
+		this.localDepth = localDepth;
+	}
 	
 	public void addToBucket(String rid) {
 		for (int i = 0; i < contents.length; i++) {
@@ -41,6 +43,10 @@ public class Bucket {
 	
 	public int getLocalDepth() {
 		return this.localDepth;
+	}
+	
+	public void incrementLocalDepth() {
+		this.localDepth++;
 	}
 }
 
