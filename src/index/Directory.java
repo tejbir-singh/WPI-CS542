@@ -42,6 +42,10 @@ public class Directory {
 		}
 		else {			// the element will fit in the bucket
 			b.addToBucket(rid, attribValue);
+			System.out.println("\nInsert ('" + rid + "', '" + attribValue + "') in Bucket "
+					+ directory.indexOf(b) + " successfully!");
+			System.out.println("Current globalDepth = " + globalDepth + ", Bucket"
+					+ directory.indexOf(b) + "'s localDepth = " + b.getLocalDepth()); 
 		}		
 	}
 	
@@ -50,9 +54,9 @@ public class Directory {
 		int location = attribValue.hashCode() % directory.size();
 		Bucket b = directory.get(location);
 		
-		System.out.println("\n\nThe current globalDepths = " + globalDepth);
+		System.out.println("\n\nThe current globalDepth = " + globalDepth);
 		System.out.println("Get attribute value = '" + attribValue + 
-				"' in Bucket " + directory.indexOf(b) + " with localDepths = " + b.getLocalDepth());
+				"' in Bucket " + directory.indexOf(b) + " with localDepth = " + b.getLocalDepth());
 		
 		// add the rid's which belong to results
 		if (b.getContents() != null){
