@@ -1,33 +1,41 @@
 package index;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *	Structure which manages and operates on a list of Buckets.
  */
-public class Directory {
-	private static Directory instance;
+public class Directory implements Serializable {
+	private static final long serialVersionUID = 7557852752759248656L;
+	private static final String fileLocation = "directory.store";
 	private static int globalDepth = 2;
-	private static int initialLocalDepth = 2;
+	static int initialLocalDepth = 2;
 	private ArrayList<Bucket> directory;
 	
 	/**
 	 * Constructor.
 	 */
-	private Directory() {
-		directory = new ArrayList<Bucket>();
-		// initialize with initialGlobalDepth Buckets
-		for (int i = 0; i < Math.pow(2, globalDepth); i++) {
-			directory.add(new Bucket(initialLocalDepth));
+	public Directory() {
+		try {
+			ObjectInputStream objIn = new ObjectInputStream (new FileInputStream(fileLocation));
+			Object obj = objIn.readObject();
+			this.directory = ((Directory) obj).getDirectory();
+			Directory.globalDepth = ((Directory) obj).getGlobalDepth();
+			objIn.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// no stored index found; initialize a new one
+			directory = new ArrayList<Bucket>();
+			for (int i = 0; i < Math.pow(2, globalDepth); i++) {
+				directory.add(new Bucket(initialLocalDepth));
+			}
+			saveContents();
 		}
-	}
-	
-	/** Singleton implementation. */
-	public static Directory getInstance() {
-		if (instance == null) {
-			instance = new Directory();
-		}
-		return instance;
 	}
 	
 	/**
@@ -40,7 +48,7 @@ public class Directory {
 	public void put(String rid, String attribValue) {
 		// find the bucket
 		// decide if it can fit
-		// if not expand
+		// if not, expand
 		int location = Math.abs(attribValue.hashCode()) % directory.size();
 		Bucket b = directory.get(location);
 		if (b.getContents()[b.getContents().length-1] != null) {
@@ -141,7 +149,9 @@ public class Directory {
 				directory.add(directory.get((int) (i - Math.pow(2, globalDepth-1))));
 			}
 		}
+		System.out.println("--- EXPAND ---");
 		redistribute(bucket);
+		System.out.println("--- END OF EXPAND ---");
 	}
 	
 	/**
@@ -168,5 +178,35 @@ public class Directory {
 		for (IndexElement e : contents) {
 			put(e.rid, e.attribValue);
 		}
+	}
+	
+	private void saveContents() {
+		// Write object with ObjectOutputStream
+		ObjectOutputStream objOut;
+		try {
+			objOut = new ObjectOutputStream(new FileOutputStream(fileLocation));
+			// Write object out to disk
+			objOut.writeObject(this);
+			objOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// getters and setters
+	public ArrayList<Bucket> getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(ArrayList<Bucket> directory) {
+		this.directory = directory;
+	}
+	
+	public int getGlobalDepth() {
+		return Directory.globalDepth;
+	}
+	
+	public void setGlobalDepth(int globalDepth) {
+		Directory.globalDepth = globalDepth;
 	}
 }

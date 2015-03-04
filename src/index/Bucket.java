@@ -1,9 +1,12 @@
 package index;
 
+import java.io.Serializable;
+
 /**
  * Class used to store indexed data.
  */
-public class Bucket {
+public class Bucket implements Serializable {
+	private static final long serialVersionUID = -5661052358083159985L;
 	public static final int bucketSize = 4;		// defines the bucket size used to create every bucket
 	private IndexElement[] contents = new IndexElement[bucketSize];	// array containing IndexElements
 	private int localDepth;						// local depth of this Bucket

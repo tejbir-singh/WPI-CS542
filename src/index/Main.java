@@ -7,8 +7,10 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
-		directory = Directory.getInstance();
-	
+		directory = new Directory();
+		// for this test, we do not want to use persistent storage.
+		initialize();
+		
 		directory.put("1", "4");   //"4".hashCode = 52
 		directory.put("2", "4");
 		directory.put("3", "4");
@@ -28,7 +30,14 @@ public class Main {
 		results = directory.get("11");
 		results = directory.get("6");
 		directory.remove("11");
-		results = directory.get("6");
-		
+		results = directory.get("6");	
+	}
+	
+	private static void initialize() {
+		directory.setDirectory(new ArrayList<Bucket>());
+		directory.setGlobalDepth(2);
+		for (int i = 0; i < 4; i++) {
+			directory.getDirectory().add(new Bucket(Directory.initialLocalDepth));		
+		}
 	}
 }
