@@ -1,14 +1,21 @@
 package index;
 
+/**
+ * Class used to store indexed data.
+ */
 public class Bucket {
-	public static final int bucketSize = 4;
-	private IndexElement[] contents = new IndexElement[bucketSize];
-	private int localDepth;
+	public static final int bucketSize = 4;		// defines the bucket size used to create every bucket
+	private IndexElement[] contents = new IndexElement[bucketSize];	// array containing IndexElements
+	private int localDepth;						// local depth of this Bucket
 	
+	/** Constructor */
 	public Bucket(int localDepth) {
 		this.localDepth = localDepth;
 	}
 	
+	/** 
+	 * Add an element to this Bucket.
+	 */
 	public void addToBucket(String rid, String attribValue) {
 		IndexElement ie = new IndexElement(rid, attribValue);
 		for (int i = 0; i < contents.length; i++) {
@@ -19,6 +26,9 @@ public class Bucket {
 		}
 	}
 	
+	/** 
+	 * Remove a bucket from this Bucket.
+	 */
 	public void removeFromBucket(String rid) {
 		for (int i = 0; i < contents.length; i++) {
 			if (contents[i].rid == rid) {		// found the rid we are removing
@@ -28,16 +38,11 @@ public class Bucket {
 		}
 	}
 
-	/**
-	 * @return the contents
-	 */
+	// Getters and setters
 	public IndexElement[] getContents() {
 		return contents;
 	}
 
-	/**
-	 * @param contents the contents to set
-	 */
 	public void setContents(IndexElement[] contents) {
 		this.contents = contents;
 	}
@@ -51,6 +56,10 @@ public class Bucket {
 	}
 }
 
+
+/**
+ *	Small data structure used to keep track of index entries.
+ */
 class IndexElement {
 	String rid;
 	String attribValue;
