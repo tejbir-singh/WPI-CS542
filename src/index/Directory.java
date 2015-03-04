@@ -49,14 +49,26 @@ public class Directory {
 		ArrayList<String> results = new ArrayList<String>();
 		int location = attribValue.hashCode() % directory.size();
 		Bucket b = directory.get(location);
-		System.out.println("\n\nglobalDepths = " + globalDepth);
-		System.out.println("localDepths = " + b.getLocalDepth());
-		System.out.println("location = " + location);
+		
+		System.out.println("\n\nThe current globalDepths = " + globalDepth);
+		System.out.println("Get attribute value = '" + attribValue + 
+				"' in Bucket " + directory.indexOf(b) + " with localDepths = " + b.getLocalDepth());
+		
 		// add the rid's which belong to results
 		if (b.getContents() != null){
 			for (IndexElement ie : b.getContents()) {
 				if (ie != null && ie.attribValue == attribValue) {
 					results.add(ie.rid);
+				}
+			}
+			
+			if (results.isEmpty()){
+				System.out.println("Oops..'" + attribValue + "' does not exist!");
+			}
+			else{
+				System.out.print("rids: ");
+				for (String rids: results){
+					System.out.print("'" + rids + "'  ");
 				}
 			}
 			return results;
@@ -72,8 +84,9 @@ public class Directory {
 		// brute force deletion?
 		for (Bucket b : directory) {
 			for (IndexElement ie : b.getContents()) {
-				if (ie.rid == rid) {
+				if (ie != null && ie.rid == rid) {
 					b.removeFromBucket(rid);
+					System.out.println("\n\nRemove rid = '" + rid + "' from Bucket " + directory.indexOf(b) + " successfully!");
 					return;
 				}
 			}
@@ -95,7 +108,7 @@ public class Directory {
 			}
 			
 			else {
-				directory.add(directory.get(i - directory.size() + 1));
+				directory.add(directory.get((int) (i - Math.pow(2, globalDepth-1))));
 			}
 		}
 		redistribute(bucket);

@@ -25,32 +25,11 @@ public class Main {
 		
 		
 		ArrayList<String> results = directory.get("4");
-		if (!results.isEmpty()){
-			System.out.print("rids: ");
-			for (String rids: results){
-				System.out.print(rids + ", ");
-			}
-		}
 		results = directory.get("8");
-		if (!results.isEmpty()){
-			System.out.print("rids: ");
-			for (String rids: results){
-				System.out.print(rids + ", ");
-			}
-		}
 		results = directory.get("11");
-		if (!results.isEmpty()){
-			System.out.print("rids: ");
-			for (String rids: results){
-				System.out.print(rids + ", ");
-			}
-		}
-		results = directory.get("5");
-		if (!results.isEmpty()){
-			System.out.print("rids: ");
-			for (String rids: results){
-				System.out.print(rids + ", ");
-			}
-		}
+		results = directory.get("6");
+		directory.remove("11");
+		results = directory.get("6");
+		
 	}
 }
