@@ -28,7 +28,7 @@ public class Directory {
 		// find the bucket
 		// decide if it can fit
 		// if not expand
-		int location = attribValue.hashCode() % directory.size();
+		int location = Math.abs(attribValue.hashCode()) % directory.size();
 		Bucket b = directory.get(location);
 		if (b.getContents()[b.getContents().length-1] != null) {
 			// decide if split or expand
@@ -42,7 +42,7 @@ public class Directory {
 		}
 		else {			// the element will fit in the bucket
 			b.addToBucket(rid, attribValue);
-			System.out.println("\nInsert ('" + rid + "', '" + attribValue + "') in Bucket "
+			System.out.println("\nInsert ('" + rid + "', '" + attribValue + "') into Bucket "
 					+ directory.indexOf(b) + " successfully!");
 			System.out.println("Current globalDepth = " + globalDepth + ", Bucket"
 					+ directory.indexOf(b) + "'s localDepth = " + b.getLocalDepth()); 
@@ -51,7 +51,7 @@ public class Directory {
 	
 	public ArrayList<String> get(String attribValue) {
 		ArrayList<String> results = new ArrayList<String>();
-		int location = attribValue.hashCode() % directory.size();
+		int location = Math.abs(attribValue.hashCode()) % directory.size();
 		Bucket b = directory.get(location);
 		
 		System.out.println("\n\nThe current globalDepth = " + globalDepth);
