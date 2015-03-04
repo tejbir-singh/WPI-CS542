@@ -33,32 +33,38 @@ public class Directory {
 		if (b.getContents()[b.getContents().length-1] != null) {
 			// decide if split or expand
 			if (b.getLocalDepth() == globalDepth) {
-				expand(b);
+				expand(b, rid, attribValue);
 			}
 			else {
-				splitBucket(b);
+				splitBucket(b, rid, attribValue);
 			}
-			location = rid.hashCode() % directory.size();
-			b = directory.get(location);
-			b.addToBucket(rid, attribValue);
 		}
-		else {				// the element will fit in the bucket
+		else {			// the element will fit in the bucket
 			b.addToBucket(rid, attribValue);
-		}
+		}		
 	}
 	
 	public ArrayList<String> get(String attribValue) {
 		ArrayList<String> results = new ArrayList<String>();
-
 		int location = attribValue.hashCode() % directory.size();
 		Bucket b = directory.get(location);
+		System.out.println("\n\nglobalDepths = " + globalDepth);
+		System.out.println("localDepths = " + b.getLocalDepth());
+		System.out.println("location = " + location);
 		// add the rid's which belong to results
-		for (IndexElement ie : b.getContents()) {
-			if (ie.attribValue == attribValue) {
-				results.add(ie.rid);
+		if (b.getContents() != null){
+			for (IndexElement ie : b.getContents()) {
+				if (ie != null && ie.attribValue == attribValue) {
+					results.add(ie.rid);
+				}
 			}
+			return results;
 		}
-		return results;
+		else {
+			return null;
+		}
+		
+		
 	}
 	
 	public void remove(String rid) {
@@ -73,12 +79,12 @@ public class Directory {
 		}
 	}
 	
-	private void expand(Bucket bucket) {
+	private void expand(Bucket bucket, String rid, String attribValue) {
 		int overflowedIndex = directory.indexOf(bucket);
 		globalDepth++;
 		bucket.incrementLocalDepth();
 		
-		for (int i = 0; i < Math.pow(2, globalDepth-1); i++) {
+		for (int i = directory.size(); i < Math.pow(2, globalDepth); i++) {
 			// if it's the location which overflowed, add a new bucket
 			// otherwise, add a reference to an old bucket
 
@@ -88,27 +94,28 @@ public class Directory {
 			}
 			
 			else {
-				directory.add(directory.get(i));
+				directory.add(directory.get(i - directory.size() + 1));
 			}
 		}
-		redistribute(bucket);
+		redistribute(bucket, rid, attribValue);
 	}
 	
-	private void splitBucket(Bucket bucket) {
+	private void splitBucket(Bucket bucket, String rid, String attribValue) {
 		bucket.incrementLocalDepth();
 		// create a bucket at overflowedIndex + Math.pow(2, globalDepth-1)
 		Double newBucketIndex = directory.indexOf(bucket) + Math.pow(2, globalDepth-1);
 		directory.set(newBucketIndex.intValue(), new Bucket(bucket.getLocalDepth()));
 		
 		// redistribute items from the original bucket
-		redistribute(bucket);
+		redistribute(bucket, rid, attribValue);
 	}
 	
-	private void redistribute(Bucket b1) {
+	private void redistribute(Bucket b1, String rid, String attribValue) {
 		IndexElement[] contents = b1.getContents();
 		b1.setContents(new IndexElement[Bucket.bucketSize]);
 		for (IndexElement e : contents) {
 			put(e.rid, e.attribValue);
 		}
+		put(rid, attribValue);
 	}
 }
