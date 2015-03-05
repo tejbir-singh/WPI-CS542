@@ -15,7 +15,7 @@ When the client calls get() the directory hashes the given data_value to find th
 
 Because it functions on the rid alone, the remove() function must go through each bucket until it finds the matching rid to delete.
 
-
+Our implementation of the index provides persistent storage to the hard disk. 
 
 Assumptions
 ===========
