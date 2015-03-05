@@ -31,6 +31,13 @@ public class Main {
 		results = directory.get("6");
 		directory.remove("11");
 		results = directory.get("6");	
+		
+		directory.remove("1");
+		results = directory.get("4");
+		directory.remove("2");
+		results = directory.get("4");
+		directory.remove("5");
+		results = directory.get("8");
 	}
 	
 	private static void initialize() {

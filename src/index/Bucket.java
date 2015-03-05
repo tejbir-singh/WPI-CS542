@@ -34,7 +34,7 @@ public class Bucket implements Serializable {
 	 */
 	public void removeFromBucket(String rid) {
 		for (int i = 0; i < contents.length; i++) {
-			if (contents[i].rid == rid) {		// found the rid we are removing
+			if (contents[i] != null && contents[i].rid == rid) {		// found the rid we are removing
 				contents[i] = null;
 				return;
 			}
