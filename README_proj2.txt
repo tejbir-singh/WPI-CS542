@@ -1,4 +1,5 @@
 Implementation
+==============
 We implemented our index as an extendible hash index. The index consists of a directory and a number of buckets. 
 
 A bucket contains a fixed-size array of IndexElements, which store the <rid> and <data_value> elements of data as in Alternative 2. It also keeps track of its local depth.
@@ -17,6 +18,7 @@ Because it functions on the rid alone, the remove() function must go through eac
 
 
 Assumptions
+===========
 -	There can be a maximum of BucketSize elements in the dataset with the same data_value. This is because extensible hashing does not allow for overflow buckets.
 
 -	There will be only one client accessing the index at a time.
