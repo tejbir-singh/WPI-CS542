@@ -67,7 +67,8 @@ public class Directory implements Serializable {
 					+ directory.indexOf(b) + " successfully!");
 			System.out.println("Current globalDepth = " + globalDepth + ", Bucket"
 					+ directory.indexOf(b) + "'s localDepth = " + b.getLocalDepth()); 
-		}		
+		}
+		saveContents();
 	}
 	
 	/**
@@ -119,6 +120,7 @@ public class Directory implements Serializable {
 				if (ie != null && ie.rid == rid) {
 					b.removeFromBucket(rid);
 					System.out.println("\n\nRemove rid = '" + rid + "' from Bucket " + directory.indexOf(b) + " successfully!");
+					saveContents();
 					return;
 				}
 			}

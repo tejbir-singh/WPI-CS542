@@ -57,13 +57,15 @@ public class Bucket implements Serializable {
 	public void incrementLocalDepth() {
 		this.localDepth++;
 	}
+	
 }
 
 
 /**
  *	Small data structure used to keep track of index entries.
  */
-class IndexElement {
+class IndexElement implements Serializable{
+	private static final long serialVersionUID = -5661052358183159985L;
 	String rid;
 	String attribValue;
 	
@@ -72,5 +74,4 @@ class IndexElement {
 		this.attribValue = attribValue;
 	}
 }
-
 
