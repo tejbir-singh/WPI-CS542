@@ -20,7 +20,6 @@ public class CityCountryPopulationComparisonOperator {
 		this.initialize = initialize; 
 	}
 	
-	
 	// read the .csv files into the Relation objects
 	public void open() throws IOException {
 		country = new Relation("country.store", true);
