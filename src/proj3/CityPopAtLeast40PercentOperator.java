@@ -1,32 +1,35 @@
 package proj3;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 
 
 public class CityPopAtLeast40PercentOperator {
 	Relation country, city;
-	Relation results = new Relation("results.store");
+	Relation results = new Relation("results.store", true);
+	private boolean initialize;
+	
+	public CityPopAtLeast40PercentOperator(boolean initialize) {
+		this.initialize = initialize; 
+	}
+	
 	
 	// read the .csv files into the Relation objects
 	public void open() throws IOException {
-		country = new Relation("country.store");
-		city = new Relation("city.store");
-		//String tuple;
-		/*
-		BufferedReader br = new BufferedReader(new FileReader("City3.csv"));
+		country = new Relation("country.store", true);
+		city = new Relation("city.store", true);
 		
-		while ((tuple = br.readLine()) != null) {
-			city.put(tuple.getBytes("UTF-8").hashCode(), tuple.getBytes("UTF-8"));
+		if (initialize) {
+			initializeRelations();
 		}
-		br.close();*/
-		/*
-		BufferedReader br = new BufferedReader(new FileReader("country.csv"));
-		while ((tuple = br.readLine()) != null) {
-			country.put(tuple.getBytes("UTF-8").hashCode(), tuple.getBytes("UTF-8"));
-		}
-		br.close();*/
 	}
 	
 	public void getNext() throws UnsupportedEncodingException {
@@ -60,11 +63,35 @@ public class CityPopAtLeast40PercentOperator {
 		while (resultsEnum.hasMoreElements()) {
 			System.out.println(new String(resultsEnum.nextElement(), "UTF-8"));
 		}
+		// delete the saved results table; we don't need it anymore
+		Path p = Paths.get("results.store");
+		try {
+			Files.delete(p);
+		} catch (IOException e) {
+			// do nothing
+		}
 	}
 	
 	// convert a given byte array into a string array
 	public String[] getTupleValues(byte[] tuple) throws UnsupportedEncodingException {
 		String str = new String(tuple, "UTF-8");
 		return str.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // ignores commas inside quotation marks
+	}
+
+	private void initializeRelations() throws UnsupportedEncodingException,
+	FileNotFoundException, IOException {
+		String tuple;
+		// read city.csv and country.csv using UTF-8 character encoding
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("City3.csv"), "UTF8"));
+		while ((tuple = br.readLine()) != null) {
+			city.put(tuple.getBytes("UTF-8").hashCode(), tuple.getBytes("UTF-8"));
+		}
+		br.close();
+
+		br = new BufferedReader(new InputStreamReader(new FileInputStream("country.csv"), "UTF8"));
+		while ((tuple = br.readLine()) != null) {
+			country.put(tuple.getBytes("UTF-8").hashCode(), tuple.getBytes("UTF-8"));
+		}
+		br.close();
 	}
 }

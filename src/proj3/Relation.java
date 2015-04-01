@@ -14,10 +14,12 @@ public class Relation implements Serializable {
 	private Hashtable<Integer, byte[]> data;
 	private String fileLocation;
 	public final int testKey = 587276264;
+	private final boolean persistent;
 	
-	public Relation(String location) {
+	public Relation(String location, boolean persistent) {
 		// first check if there is data to load
-		fileLocation = location;
+		this.fileLocation = location;
+		this.persistent = persistent;
 		try {
 			ObjectInputStream objIn = new ObjectInputStream (new FileInputStream(fileLocation));
 			Object obj = objIn.readObject();
@@ -52,6 +54,9 @@ public class Relation implements Serializable {
 	
 	public void saveContents() {
 		// Write object with ObjectOutputStream
+		if (!this.persistent) {
+			return;
+		}
 		ObjectOutputStream objOut;
 		try {
 			objOut = new ObjectOutputStream(new FileOutputStream(fileLocation));
