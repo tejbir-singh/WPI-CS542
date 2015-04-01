@@ -7,7 +7,8 @@ public class Main {
 		CityCountryPopulationComparisonOperator cityPop = new CityCountryPopulationComparisonOperator(false);
 		
 		cityPop.open();
-		cityPop.getNext();
+		//cityPop.getNext();
+		cityPop.getNextSortedCountry();
 		cityPop.close();
 	}
 }
