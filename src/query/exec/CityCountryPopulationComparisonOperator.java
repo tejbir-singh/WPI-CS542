@@ -1,4 +1,4 @@
-package proj3;
+package query.exec;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
-
 
 public class CityCountryPopulationComparisonOperator {
 	Relation country, city;
