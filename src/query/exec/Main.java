@@ -8,7 +8,7 @@ public class Main {
 		
 		cityPop.open();
 		//cityPop.getNext();
-		cityPop.getNextSortedCountry();
+		cityPop.getNextBySortedCountry();
 		cityPop.close();
 	}
 }

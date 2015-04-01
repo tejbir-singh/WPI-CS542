@@ -76,7 +76,7 @@ public class CityCountryPopulationComparisonOperator{
 		}
 	}
 	
-	public void getNextSortedCountry() throws UnsupportedEncodingException {
+	public void getNextBySortedCountry() throws UnsupportedEncodingException {
 		int flag;
 		ArrayList<CountryPop> sortedCountry = sortCountry();
 		Enumeration<byte[]> cityEnum = city.getValuesEnum();
@@ -84,10 +84,7 @@ public class CityCountryPopulationComparisonOperator{
 			String[] cityValues = getTupleValues(cityEnum.nextElement());
 			
 			flag = binarySearch(sortedCountry, 0, sortedCountry.size()-1, cityValues[2].substring(1, cityValues[2].length()-1));
-			if (flag == -1){
-				break;
-			}
-			else{
+			if (flag != -1){
 				Double ci = Double.parseDouble(cityValues[4].substring(1, cityValues[4].length()-1));
 				Double co = Double.parseDouble(sortedCountry.get(flag).couPop[1]);
 				if (ci/co > .4) {
