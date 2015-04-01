@@ -12,12 +12,12 @@ import java.nio.file.Paths;
 import java.util.Enumeration;
 
 
-public class CityPopAtLeast40PercentOperator {
+public class CityCountryPopulationComparisonOperator {
 	Relation country, city;
 	Relation results = new Relation("results.store", true);
 	private boolean initialize;
 	
-	public CityPopAtLeast40PercentOperator(boolean initialize) {
+	public CityCountryPopulationComparisonOperator(boolean initialize) {
 		this.initialize = initialize; 
 	}
 	

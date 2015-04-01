@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		CityPopAtLeast40PercentOperator cityPop = new CityPopAtLeast40PercentOperator(true);
+		CityCountryPopulationComparisonOperator cityPop = new CityCountryPopulationComparisonOperator(true);
 		
 		cityPop.open();
 		cityPop.getNext();
