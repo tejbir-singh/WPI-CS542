@@ -24,6 +24,7 @@ public class Main {
 		};
 		
 		for (String exp : expected) {
+			exp = new String(exp.toString().getBytes("UTF-8"), "UTF-8");
 			flag = 1;
 			for (String res : results) {
 				if (res.toString().equals(exp.toString())) {

@@ -18,3 +18,29 @@ Testing
 We had a fairly straightforward testing procedure, as we were only asked to account for one query: running each of our open(), getNext() and close() procedures and verifying the results against the expected results. We obtained the results from running the query on the same dataset in MySQL.
 
 In order to run our code, simply run the application from query.exec.Main.java.
+
+NOTE: Some special characters from our results and .csv files may appear improperly. They use the UTF-8 encoding, therefore editors that use a different encoding my display them improperly. This is only a display issue; the results should still match the expected results.
+
+Sample results output:
+
+RESULTS
+Time: 513 ms.
+"Città del Vaticano"
+"Victoria"
+"Nassau"
+"Adamstown"
+"Gibraltar"
+"Dalap-Uliga-Darrit"
+"Djibouti"
+"Bantam"
+"Longyearbyen"
+"El-Aaiún"
+"Avarua"
+"George Town"
+"Stanley"
+"Saint-Pierre"
+"Singapore"
+"Koror"
+"Macao"
+"Doha"
+SUCCESS: Returned expected results.
