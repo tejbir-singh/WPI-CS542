@@ -27,6 +27,7 @@ public class Main {
 			exp = new String(exp.toString().getBytes("UTF-8"), "UTF-8");
 			flag = 1;
 			for (String res : results) {
+				res = new String(res.toString().getBytes("UTF-8"), "UTF-8");
 				if (res.toString().equals(exp.toString())) {
 					flag = 0;
 					System.out.println(res);
