@@ -27,7 +27,6 @@ public class Relation implements Serializable {
 			
 		} catch (IOException | ClassNotFoundException e) {
 			this.data = new Hashtable<Integer, byte[]>();
-			saveContents();
 		}
 	}
 	
