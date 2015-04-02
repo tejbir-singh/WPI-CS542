@@ -19,7 +19,7 @@ We had a fairly straightforward testing procedure, as we were only asked to acco
 
 In order to run our code, simply run the application from query.exec.Main.java.
 
-NOTE: Some special characters from our results and .csv files may appear improperly. They use the UTF-8 encoding, therefore editors that use a different encoding my display them improperly.
+NOTE: Some special characters from our results and .csv files may appear improperly. They use the UTF-8 encoding, therefore editors that use a different encoding my display them improperly. If the machine cannot properly read the UTF-8 character encoding then results may not match.
 
 Sample results output:
 
