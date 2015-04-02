@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		ArrayList<String> results;
-		int flag = 0;
+		boolean flag = false;
 		CityCountryPopulationComparisonOperator cityPop = new CityCountryPopulationComparisonOperator();
 		long startTime = System.currentTimeMillis();
 		cityPop.open();
@@ -25,18 +25,16 @@ public class Main {
 		
 		for (String exp : expected) {
 			exp = new String(exp.toString().getBytes("UTF-8"), "UTF-8");
-			flag = 1;
+			flag = false;
 			for (String res : results) {
 				res = new String(res.toString().getBytes("UTF-8"), "UTF-8");
 				if (res.toString().equals(exp.toString())) {
-					flag = 0;
 					System.out.println(res);
-					break;
+					flag = true;
 				}
 			}
-			if (flag == 1) {
+			if (!flag) {
 				System.out.println("ERROR: Unexpected result.");
-				return;
 			}
 		}
 		System.out.println("SUCCESS: Returned expected results.");
