@@ -34,7 +34,7 @@ public class UpdateOperator {
 			country.remove(i);
 			country.put(i, modifiedValues);
 		}
-
+		
 		// modify city population
 		for (Integer i : city.getRidList()) {
 			String[] cityValues = getTupleValues(city.get(i));
@@ -51,12 +51,16 @@ public class UpdateOperator {
 	}
 
 	public void close() throws UnsupportedEncodingException {
+		// TODO: Commit
+		city.getLog().add(new LogElement("COMMIT", "", "", ""));
+		city.saveContents();
+		country.getLog().add(new LogElement("COMMIT", "", "", ""));
+		country.saveContents();
 		System.out.println("Successfully increased all populations by 2%.");
 	}
 
 	// Convert a given byte array into a string array
-	public String[] getTupleValues(byte[] tuple)
-			throws UnsupportedEncodingException {
+	public String[] getTupleValues(byte[] tuple) throws UnsupportedEncodingException {
 		String str = new String(tuple, "UTF-8");
 		return str.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // ignores commas inside quotation marks
 	}

@@ -9,5 +9,4 @@ public class LogElement {
 		this.newValue = newValue;
 		this.oldValue = oldValue;
 	}
-
 }

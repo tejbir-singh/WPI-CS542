@@ -26,7 +26,6 @@ public class Relation implements Serializable {
 			this.data = (Hashtable<Integer, byte[]>) objIn.readObject();
 			this.ridList = (ArrayList<Integer>) objIn.readObject();
 			objIn.close();
-			
 		} catch (IOException | ClassNotFoundException e) {
 			this.data = new Hashtable<Integer, byte[]>();
 		}
@@ -37,7 +36,6 @@ public class Relation implements Serializable {
 		synchronized(this) {
 			data.put(key, value);
 		}
-		saveContents();
 	}
 	
 	public byte[] get(int key) {
@@ -49,9 +47,9 @@ public class Relation implements Serializable {
 		synchronized(this) {
 			data.remove(key);
 		}
-		saveContents();
 	}
 	
+	// TODO: Change to save contents only on COMMIT
 	public void saveContents() {
 		// Write object with ObjectOutputStream
 		if (!this.persistent) {
@@ -72,6 +70,5 @@ public class Relation implements Serializable {
 	protected void clearData() { this.data = new Hashtable<Integer, byte[]>(); }
 	public Enumeration<byte[]> getValuesEnum() {  return data.elements(); }
 	public ArrayList<Integer> getRidList() {  return this.ridList; }
-	public ArrayList<LogElement> getLog() { return this.log; }  
-	
+	public ArrayList<LogElement> getLog() { return this.log; }
 }
