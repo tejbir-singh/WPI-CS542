@@ -19,21 +19,17 @@ public class UpdateOperator {
 
 	public void getNext() throws UnsupportedEncodingException {
 		// iterate through the relation, increasing each population by 2%
-		String newPopulation, oldValue = "";
 		byte[] modifiedValues;
 		
 		// modify city population
 		for (Integer i : r.getKeysArray()) {
 			String[] values = getTupleValues(r.get(i));
-			oldValue = Double.valueOf(values[populationIndex].substring(
-					1, values[populationIndex].length() - 1)).toString();
-			newPopulation = updatePopulation(
-					Double.parseDouble(values[populationIndex].substring(
-							1, values[populationIndex].length() - 1))).toString();
-			values[populationIndex] = "\"" + newPopulation + "\"";
+			long oldPop = Math.round(Double.valueOf(
+					values[populationIndex].substring(1, values[populationIndex].length() - 1)));
+			values[populationIndex] = "\"" + updatePopulation(oldPop) + "\"";
 			modifiedValues = unsplit(values);
 			// Log the modification
-			r.getLog().add(new LogElement("T", "" + i, oldValue, values[populationIndex]));
+			r.getLog().add(new LogElement("T", "" + i, "" + oldPop, values[populationIndex]));
 			r.remove(i);
 			r.put(i, modifiedValues);
 		}
@@ -79,7 +75,7 @@ public class UpdateOperator {
 	 * @param population to manipulate
 	 * @return updated population
 	 */
-	private Double updatePopulation(Double pop) {
-		return pop.doubleValue() * 1.02;
+	private long updatePopulation(long pop) {
+		return Math.round(pop * 1.02);
 	}
 }
