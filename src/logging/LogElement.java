@@ -9,4 +9,9 @@ public class LogElement {
 		this.newValue = newValue;
 		this.oldValue = oldValue;
 	}
+	
+	@Override
+	public String toString() {
+		return "" + this.transaction + "," + this.element + "," + this.newValue + "," + this.oldValue;
+	}
 }

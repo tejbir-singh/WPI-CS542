@@ -1,9 +1,12 @@
 package logging;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -66,4 +69,17 @@ public class Relation implements Serializable {
 	public ArrayList<Integer> getKeysArray() {  return new ArrayList<Integer> (data.keySet()); }
 	public ArrayList<byte[]> getValuesArray() {  return new ArrayList<byte[]> (data.values()); }
 	public ArrayList<LogElement> getLog() { return this.log; }
+	
+	// Output the log to a .log file.
+	public void outputLog() {
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileLocation + ".log", true)));
+			for (LogElement le : log) {
+				out.println(le.toString());
+			}
+			out.close();
+		} catch (IOException e) {
+		    //exception handling left as an exercise for the reader
+		}
+	}
 }

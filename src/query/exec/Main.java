@@ -1,59 +1,42 @@
 package query.exec;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-
-import logging.Relation;
-import logging.UpdateOperator;
+import java.util.ArrayList;
 
 public class Main {
-	static Relation country = new Relation("country.store", true);
-	static Relation city = new Relation("city.store", true);
-	
 	public static void main(String[] args) throws IOException {
-		initializeRelations();
+		ArrayList<String> results;
+		boolean flag = false;
+		CityCountryPopulationComparisonOperator cityPop = new CityCountryPopulationComparisonOperator();
 		long startTime = System.currentTimeMillis();
-		UpdateOperator cityPop = new UpdateOperator(city, 4);
-		UpdateOperator countryPop = new UpdateOperator(country, 6);
-		
 		cityPop.open();
 		cityPop.getNext();
-		cityPop.close();
-		
-		countryPop.open();
-		countryPop.getNext();
-		countryPop.close();
+		//Alternative method: cityPop.getNextAlternative();
+		results = cityPop.close();
 
 		// output the total runtime
 		System.out.println("Time: " + (System.currentTimeMillis()-startTime) + " ms.");
-	}
-	
-	// If the storage files do not exist, run this to generate the tables from
-	// the .csv files
-	private static void initializeRelations() throws IOException {
-		String tuple;
-		// read city.csv and country.csv using UTF-8 character encoding
-		File file = new File("country.store");
-		if (file.exists()) {
-			return;
+		
+		// for testing
+		String[] expected = {"\"Città del Vaticano\"","\"Victoria\"","\"Nassau\"","\"Adamstown\"","\"Gibraltar\"",
+				"\"Dalap-Uliga-Darrit\"","\"Djibouti\"","\"Bantam\"","\"Longyearbyen\"","\"El-Aaiún\"","\"Avarua\"",
+				"\"George Town\"","\"Stanley\"","\"Saint-Pierre\"","\"Singapore\"","\"Koror\"","\"Macao\"","\"Doha\""
+		};
+		
+		for (String exp : expected) {
+			exp = new String(exp.toString().getBytes("UTF-8"), "UTF-8");
+			flag = false;
+			for (String res : results) {
+				res = new String(res.toString().getBytes("UTF-8"), "UTF-8");
+				if (res.toString().equals(exp.toString())) {
+					System.out.println(res);
+					flag = true;
+				}
+			}
+			if (!flag) {
+				System.out.println("ERROR: Unexpected result.");
+			}
 		}
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				new FileInputStream("city.csv"), "UTF8"));
-		while ((tuple = br.readLine()) != null) {
-			city.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
-		}
-		br.close();
-
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(
-				"country.csv"), "UTF8"));
-		while ((tuple = br.readLine()) != null) {
-			country.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
-		}
-		br.close();
+		System.out.println("SUCCESS: Returned expected results.");
 	}
 }
