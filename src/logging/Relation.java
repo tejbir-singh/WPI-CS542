@@ -6,14 +6,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class Relation implements Serializable {
 	private static final long serialVersionUID = -8534916903031691902L;
 	private Hashtable<Integer, byte[]> data;
 	private String fileLocation;
-	private ArrayList<Integer> ridList = new ArrayList<Integer>();
 	private final boolean persistent;
 	private ArrayList<LogElement> log = new ArrayList<LogElement>();
 	
@@ -24,7 +22,6 @@ public class Relation implements Serializable {
 		try {
 			ObjectInputStream objIn = new ObjectInputStream (new FileInputStream(fileLocation));
 			this.data = (Hashtable<Integer, byte[]>) objIn.readObject();
-			this.ridList = (ArrayList<Integer>) objIn.readObject();
 			objIn.close();
 		} catch (IOException | ClassNotFoundException e) {
 			this.data = new Hashtable<Integer, byte[]>();
@@ -49,7 +46,6 @@ public class Relation implements Serializable {
 		}
 	}
 	
-	// TODO: Change to save contents only on COMMIT
 	public void saveContents() {
 		// Write object with ObjectOutputStream
 		if (!this.persistent) {
@@ -60,7 +56,6 @@ public class Relation implements Serializable {
 			objOut = new ObjectOutputStream(new FileOutputStream(fileLocation));
 			// Write object out to disk
 			objOut.writeObject(this.data);
-			objOut.writeObject(this.ridList);
 			objOut.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -68,7 +63,7 @@ public class Relation implements Serializable {
 	}
 	
 	protected void clearData() { this.data = new Hashtable<Integer, byte[]>(); }
-	public Enumeration<byte[]> getValuesEnum() {  return data.elements(); }
-	public ArrayList<Integer> getRidList() {  return this.ridList; }
+	public ArrayList<Integer> getKeysArray() {  return new ArrayList<Integer> (data.keySet()); }
+	public ArrayList<byte[]> getValuesArray() {  return new ArrayList<byte[]> (data.values()); }
 	public ArrayList<LogElement> getLog() { return this.log; }
 }

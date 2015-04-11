@@ -1,61 +1,47 @@
 package logging;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 public class UpdateOperator {
-	Relation country, city;
-	Relation results = new Relation("results.store", false);
+	Relation r;
+	int populationIndex; 	// specifies the index within the tuple that 
+							// contains the population data
 
-	// read the .csv files into the Relation objects
+	public UpdateOperator(Relation r, int populationIndex) {
+		this.r = r;
+		this.populationIndex = populationIndex;
+	}
+	
 	public void open() throws IOException {
-		country = new Relation("country.store", true);
-		city = new Relation("city.store", true);
-		initializeRelations();
+		// TODO: What do we do here?
 	}
 
 	public void getNext() throws UnsupportedEncodingException {
-		// iterate through Country and City, increasing each population by 2%
+		// iterate through the relation, increasing each population by 2%
 		String newPopulation, oldValue = "";
 		byte[] modifiedValues;
-		for (Integer i : country.getRidList()) {
-			String[] countryValues = getTupleValues(country.get(i));
-			oldValue = Double.valueOf(countryValues[6].substring(1, countryValues[6].length() - 1)).toString();
-			newPopulation = updatePopulation(
-					Double.parseDouble(countryValues[6].substring(1, countryValues[6].length() - 1))).toString();
-			countryValues[6] = "\"" + newPopulation + "\"";
-			modifiedValues = unsplit(countryValues);
-			// log the modification
-			country.getLog().add(new LogElement("T", "" + i, oldValue, countryValues[6]));
-			country.remove(i);
-			country.put(i, modifiedValues);
-		}
 		
 		// modify city population
-		for (Integer i : city.getRidList()) {
-			String[] cityValues = getTupleValues(city.get(i));
-			oldValue = Double.valueOf(cityValues[4].substring(1, cityValues[4].length() - 1)).toString();
+		for (Integer i : r.getKeysArray()) {
+			String[] values = getTupleValues(r.get(i));
+			oldValue = Double.valueOf(values[populationIndex].substring(
+					1, values[populationIndex].length() - 1)).toString();
 			newPopulation = updatePopulation(
-					Double.parseDouble(cityValues[4].substring(1, cityValues[4].length() - 1))).toString();
-			cityValues[4] = "\"" + newPopulation + "\"";
-			modifiedValues = unsplit(cityValues);
+					Double.parseDouble(values[populationIndex].substring(
+							1, values[populationIndex].length() - 1))).toString();
+			values[populationIndex] = "\"" + newPopulation + "\"";
+			modifiedValues = unsplit(values);
 			// Log the modification
-			city.getLog().add(new LogElement("T", "" + i, oldValue, cityValues[4]));
-			city.remove(i);
-			city.put(i, modifiedValues);
+			r.getLog().add(new LogElement("T", "" + i, oldValue, values[populationIndex]));
+			r.remove(i);
+			r.put(i, modifiedValues);
 		}
 	}
 
 	public void close() throws UnsupportedEncodingException {
-		// TODO: Commit
-		city.getLog().add(new LogElement("COMMIT", "", "", ""));
-		city.saveContents();
-		country.getLog().add(new LogElement("COMMIT", "", "", ""));
-		country.saveContents();
+		r.getLog().add(new LogElement("COMMIT", "", "", ""));
+		r.saveContents();
 		System.out.println("Successfully increased all populations by 2%.");
 	}
 
@@ -76,37 +62,16 @@ public class UpdateOperator {
 	 */
 	private byte[] unsplit(String[] splitArray)
 			throws UnsupportedEncodingException {
-		String retString = "";
+		String retString = null;
 		for (String str : splitArray) {
-			retString = retString + "," + str;
+			if (retString == null) {
+				retString = str;
+			}
+			else {
+				retString = retString + "," + str;
+			}
 		}
 		return retString.getBytes("UTF-8");
-	}
-
-	// If the storage files do not exist, run this to generate the tables from
-	// the .csv files
-	private void initializeRelations() throws IOException {
-		String tuple;
-		// read city.csv and country.csv using UTF-8 character encoding
-		File file = new File("country.store");
-		if (file.exists()) {
-			return;
-		}
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				new FileInputStream("city.csv"), "UTF8"));
-		while ((tuple = br.readLine()) != null) {
-			city.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
-		}
-		br.close();
-
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(
-				"country.csv"), "UTF8"));
-		while ((tuple = br.readLine()) != null) {
-			country.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
-		}
-		br.close();
 	}
 
 	/**
