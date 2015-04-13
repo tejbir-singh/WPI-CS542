@@ -26,10 +26,10 @@ public class UpdateOperator {
 			String[] values = getTupleValues(r.get(i));
 			long oldPop = Math.round(Double.valueOf(
 					values[populationIndex].substring(1, values[populationIndex].length() - 1)));
-			values[populationIndex] = "\"" + updatePopulation(oldPop) + "\"";
+			values[populationIndex] = "" + updatePopulation(oldPop);
 			modifiedValues = unsplit(values);
 			// Log the modification
-			r.getLog().add(new LogElement("T", "" + i, "" + oldPop, values[populationIndex]));
+			r.getLog().add(new LogElement("T", "" + i, values[populationIndex], "" + oldPop));
 			r.remove(i);
 			r.put(i, modifiedValues);
 		}
@@ -51,8 +51,7 @@ public class UpdateOperator {
 	 * Reconnect all array elements as a comma-delimited string and convert back
 	 * to byte array.
 	 * 
-	 * @param array
-	 *            to reconnect and convert to byte array
+	 * @param array to reconnect and convert to byte array
 	 * @return byte array consisting of the parameter's information
 	 * @throws UnsupportedEncodingException
 	 */
