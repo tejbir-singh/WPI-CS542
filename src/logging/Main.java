@@ -7,14 +7,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import logging.Relation;
-import logging.UpdateOperator;
 
 public class Main {
 	static Relation country = new Relation("country.store", true);
+	static Relation countryOld = new Relation("country.old.store", true);
 	static Relation city = new Relation("city.store", true);
+	static Relation cityOld = new Relation("city.old.store", true);
 	
 	public static void main(String[] args) throws IOException {
 		initializeRelations();
+		country.saveContents();
+		countryOld.saveContents();
+		city.saveContents();
+		cityOld.saveContents();
+		
 		long startTime = System.currentTimeMillis();
 		UpdateOperator cityPop = new UpdateOperator(city, 4);
 		UpdateOperator countryPop = new UpdateOperator(country, 6);
@@ -47,6 +53,8 @@ public class Main {
 		while ((tuple = br.readLine()) != null) {
 			city.put(tuple.getBytes("UTF-8").hashCode(),
 					tuple.getBytes("UTF-8"));
+			cityOld.put(tuple.getBytes("UTF-8").hashCode(),
+					tuple.getBytes("UTF-8"));
 		}
 		br.close();
 
@@ -54,6 +62,8 @@ public class Main {
 				"country.csv"), "UTF8"));
 		while ((tuple = br.readLine()) != null) {
 			country.put(tuple.getBytes("UTF-8").hashCode(),
+					tuple.getBytes("UTF-8"));
+			countryOld.put(tuple.getBytes("UTF-8").hashCode(),
 					tuple.getBytes("UTF-8"));
 		}
 		br.close();
