@@ -42,7 +42,7 @@ public class UpdateOperator {
 	}
 
 	// Convert a given byte array into a string array
-	public String[] getTupleValues(byte[] tuple) throws UnsupportedEncodingException {
+	protected static String[] getTupleValues(byte[] tuple) throws UnsupportedEncodingException {
 		String str = new String(tuple, "UTF-8");
 		return str.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // ignores commas inside quotation marks
 	}
@@ -55,7 +55,7 @@ public class UpdateOperator {
 	 * @return byte array consisting of the parameter's information
 	 * @throws UnsupportedEncodingException
 	 */
-	private byte[] unsplit(String[] splitArray)
+	protected static byte[] unsplit(String[] splitArray)
 			throws UnsupportedEncodingException {
 		String retString = null;
 		for (String str : splitArray) {
