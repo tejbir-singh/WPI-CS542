@@ -44,27 +44,23 @@ public class Main {
 	private static void initializeRelations() throws IOException {
 		String tuple;
 		// read city.csv and country.csv using UTF-8 character encoding
-		File file = new File("country.store");
-		if (file.exists()) {
-			return;
-		}
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new FileInputStream("city.csv"), "UTF8"));
 		while ((tuple = br.readLine()) != null) {
-			city.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
-			cityOld.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
+			byte[] byteArr = tuple.getBytes("UTF-8");
+			int key = byteArr.hashCode();
+			city.put(key, byteArr);
+			cityOld.put(key, byteArr);
 		}
 		br.close();
 
 		br = new BufferedReader(new InputStreamReader(new FileInputStream(
 				"country.csv"), "UTF8"));
 		while ((tuple = br.readLine()) != null) {
-			country.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
-			countryOld.put(tuple.getBytes("UTF-8").hashCode(),
-					tuple.getBytes("UTF-8"));
+			byte[] byteArr = tuple.getBytes("UTF-8");
+			int key = byteArr.hashCode();
+			country.put(key, byteArr);
+			countryOld.put(key, byteArr);
 		}
 		br.close();
 	}
