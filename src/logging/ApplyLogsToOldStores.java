@@ -15,8 +15,8 @@ import java.util.Scanner;
 public class ApplyLogsToOldStores {
 	
 public static void main(String[] args) throws IOException {
-	updateDataStore("C:\\Users\\Tejbir\\src\\WPI-CS542\\city.store.log", "city.old.store");
-	updateDataStore("C:\\Users\\Tejbir\\src\\WPI-CS542\\country.store.log", "country.old.store");
+	updateDataStore("city.store.log", "city.old.store");
+	updateDataStore("country.store.log", "country.old.store");
 }
 
 private static void updateDataStore(String csvLogFile, String dstore) {
