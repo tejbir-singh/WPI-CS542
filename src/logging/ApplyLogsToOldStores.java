@@ -14,16 +14,19 @@ import java.util.Scanner;
 
 public class ApplyLogsToOldStores {
 
+	private static final int CityPopulationIdx = 4;
+	private static final int CountryPopulationIdx = 6;
+	
 	public static void main(String[] args) throws IOException {
-		updateDataStore("city.store.log", "city.old.store");
-		updateDataStore("country.store.log", "country.old.store");
+		updateDataStore("city.store.log", "city.old.store", CityPopulationIdx );
+		updateDataStore("country.store.log", "country.old.store", CountryPopulationIdx);
 	}
 
 	/*
 	 *  This method will take two files: log file and data store and apply the 
 	 *  log file to update the data store
 	 */
-	private static void updateDataStore(String csvLogFile, String dstore) throws FileNotFoundException, IOException {
+	private static void updateDataStore(String csvLogFile, String dstore, int populationIdx) throws FileNotFoundException, IOException {
 		BufferedReader br = null;
 		String line = "";
 		String csvSplitBy = ",";
@@ -40,26 +43,25 @@ public class ApplyLogsToOldStores {
 
 		try {
 			br = new BufferedReader(new FileReader(csvLogFile));
-			while ( (line = br.readLine()) != null) {
+				while ( (line = br.readLine()) != null) {
+					String[] tokens = line.split(csvSplitBy);
+					if (!tokens[0].equals("COMMIT"))
+					{
+						hashValue = tokens[1];
+						oldPopulationVal = tokens[3];
+						newPopulationVal = tokens[2];
+						hashVal = Integer.parseInt(hashValue);
 
-				String[] tokens = line.split(csvSplitBy);
-				if (!tokens[0].equals("COMMIT"))
-				{
-					hashValue = tokens[1];
-					oldPopulationVal = tokens[3];
-					newPopulationVal = tokens[2];
-					hashVal = Integer.parseInt(hashValue);
-
-					oldTuple = oldDataStore.get(hashVal); 
-					tupleTokenized = UpdateOperator.getTupleValues(oldTuple);
-					// update the value of Tuple with new population value from log
-					tupleTokenized[4] = newPopulationVal;
-					oldDataStore.remove(hashVal);
-					updatedTuple = UpdateOperator.unsplit(tupleTokenized);
-					oldDataStore.put(hashVal, updatedTuple);
-					System.out.println(tupleTokenized);
+						oldTuple = oldDataStore.get(hashVal); 
+						tupleTokenized = UpdateOperator.getTupleValues(oldTuple);
+						// update the value of Tuple with new population value from log
+						tupleTokenized[populationIdx] = newPopulationVal;
+						oldDataStore.remove(hashVal);
+						updatedTuple = UpdateOperator.unsplit(tupleTokenized);
+						oldDataStore.put(hashVal, updatedTuple);
+						System.out.println(tupleTokenized);
+					}
 				}
-			}
 		}
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
@@ -74,7 +76,6 @@ public class ApplyLogsToOldStores {
 				}
 			}
 		}
-		System.out.println("done");
 	}
 } /* end of class definition */
 
