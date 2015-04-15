@@ -28,19 +28,14 @@ public class ApplyLogsToOldStores {
 	 */
 	private static void updateDataStore(String csvLogFile, String dstore, int populationIdx) throws FileNotFoundException, IOException {
 		BufferedReader br = null;
+		String[] tupleTokenized;
 		String line = "";
 		String csvSplitBy = ",";
-		String hashValue;
-		String oldPopulationVal;
-		String newPopulationVal;
+		String hashValue, oldPopulationVal, newPopulationVal, tuple;
 		int hashVal;
-		byte[] updatedTuple;
-		String tuple;
-		String[] tupleTokenized;
-		byte[] oldTuple;
+		byte[] oldTuple, updatedTuple;
 
 		Relation oldDataStore = new Relation(dstore, true);
-
 		try {
 			br = new BufferedReader(new FileReader(csvLogFile));
 				while ( (line = br.readLine()) != null) {
