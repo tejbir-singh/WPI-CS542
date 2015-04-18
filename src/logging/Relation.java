@@ -70,7 +70,9 @@ public class Relation implements Serializable {
 	public ArrayList<byte[]> getValuesArray() {  return new ArrayList<byte[]> (data.values()); }
 	public ArrayList<LogElement> getLog() { return this.log; }
 	
-	// Output the log to a .log file.
+	/**
+	 *  Output the log to a .log file.
+	 */
 	public void outputLog() {
 		try {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileLocation + ".log", true)));
@@ -79,7 +81,7 @@ public class Relation implements Serializable {
 			}
 			out.close();
 		} catch (IOException e) {
-		    //exception handling left as an exercise for the reader
+		    e.printStackTrace();
 		}
 	}
 }

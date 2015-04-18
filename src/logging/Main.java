@@ -44,9 +44,16 @@ public class Main {
 			}
 		}
 		
+		for (int k : city.getKeysArray()) {
+			if (!Arrays.equals(cityOld.get(k), city.get(k))) {
+				System.out.println("Error: Relations do not match");
+				return;
+			}
+		}
+		
 		// output the total runtime
-		System.out.println("Time: " + (System.currentTimeMillis()-startTime) + " ms.");
 		System.out.println("Logs successfully generated and applied to secondary relation.");
+		System.out.println("Time: " + (System.currentTimeMillis()-startTime) + " ms.");
 	}
 	
 	// If the storage files do not exist, run this to generate the tables from

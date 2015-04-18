@@ -17,8 +17,10 @@ public class UpdateOperator {
 		// All loading is done in the main function.
 	}
 
+	/**
+	 * Iterate through the relation, increasing each population by 2%
+	 */
 	public void getNext() throws UnsupportedEncodingException {
-		// iterate through the relation, increasing each population by 2%
 		byte[] modifiedValues;
 		
 		// modify city population
@@ -35,6 +37,9 @@ public class UpdateOperator {
 		}
 	}
 
+	/**
+	 * Write the COMMIT message to the log and output the log.
+	 */
 	public void close() throws UnsupportedEncodingException {
 		r.getLog().add(new LogElement("COMMIT", "", "", ""));
 		r.saveContents();
