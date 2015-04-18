@@ -32,8 +32,6 @@ public class Main {
 
 		city.outputLog();
 		country.outputLog();
-		// output the total runtime
-		System.out.println("Time: " + (System.currentTimeMillis()-startTime) + " ms.");
 		
 		// Apply the logs to countryOld and cityOld
 		ApplyLogsToStore.updateDataStore("city.store.log", cityOld, CityPopulationIdx);
@@ -47,6 +45,8 @@ public class Main {
 			}
 		}
 		
+		// output the total runtime
+		System.out.println("Time: " + (System.currentTimeMillis()-startTime) + " ms.");
 		System.out.println("Logs successfully generated and applied to secondary relation.");
 	}
 	

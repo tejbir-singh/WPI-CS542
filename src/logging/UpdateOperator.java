@@ -14,7 +14,7 @@ public class UpdateOperator {
 	}
 	
 	public void open() throws IOException {
-		// TODO: What do we do here?
+		// All loading is done in the main function.
 	}
 
 	public void getNext() throws UnsupportedEncodingException {
