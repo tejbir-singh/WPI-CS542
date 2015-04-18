@@ -25,13 +25,12 @@ public class Main {
 		cityPop.open();
 		cityPop.getNext();
 		cityPop.close();
+		System.out.println("City: Successfully increased all populations by 2%");
 		
 		countryPop.open();
 		countryPop.getNext();
 		countryPop.close();
-
-		city.outputLog();
-		country.outputLog();
+		System.out.println("Country: Successfully increased all populations by 2%");
 		
 		// Apply the logs to countryOld and cityOld
 		ApplyLogsToStore.updateDataStore("city.store.log", cityOld, CityPopulationIdx);

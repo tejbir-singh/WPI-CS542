@@ -23,11 +23,11 @@ public class UpdateOperator {
 		
 		// modify city population
 		for (Integer i : r.getKeysArray()) {
-			String[] values = getTupleValues(r.get(i));
+			String[] values = LoggingUtil.getTupleValues(r.get(i));
 			long oldPop = Math.round(Double.valueOf(
 					values[populationIndex].substring(1, values[populationIndex].length() - 1)));
 			values[populationIndex] = "" + updatePopulation(oldPop);
-			modifiedValues = unsplit(values);
+			modifiedValues = LoggingUtil.unsplit(values);
 			// Log the modification
 			r.getLog().add(new LogElement("T", "" + i, values[populationIndex], "" + oldPop));
 			r.remove(i);
@@ -38,35 +38,7 @@ public class UpdateOperator {
 	public void close() throws UnsupportedEncodingException {
 		r.getLog().add(new LogElement("COMMIT", "", "", ""));
 		r.saveContents();
-		System.out.println("Successfully increased all populations by 2%.");
-	}
-
-	// Convert a given byte array into a string array
-	protected static String[] getTupleValues(byte[] tuple) throws UnsupportedEncodingException {
-		String str = new String(tuple, "UTF-8");
-		return str.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // ignores commas inside quotation marks
-	}
-
-	/**
-	 * Reconnect all array elements as a comma-delimited string and convert back
-	 * to byte array.
-	 * 
-	 * @param array to reconnect and convert to byte array
-	 * @return byte array consisting of the parameter's information
-	 * @throws UnsupportedEncodingException
-	 */
-	protected static byte[] unsplit(String[] splitArray)
-			throws UnsupportedEncodingException {
-		String retString = null;
-		for (String str : splitArray) {
-			if (retString == null) {
-				retString = str;
-			}
-			else {
-				retString = retString + "," + str;
-			}
-		}
-		return retString.getBytes("UTF-8");
+		r.outputLog();
 	}
 
 	/**

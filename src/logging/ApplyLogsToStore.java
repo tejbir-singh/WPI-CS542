@@ -8,11 +8,11 @@ import java.io.IOException;
 public class ApplyLogsToStore {
 	/**
 	 *  This method will take the log file and apply it to the data store. 
-	 *  @param csvLogFile log file location
+	 *  @param logFile log file location
 	 *  @param r Relation to update
 	 *  @param populationIdx index of the population in the tuple
 	 */
-	public static void updateDataStore(String csvLogFile, Relation r, int populationIdx) throws FileNotFoundException, IOException {
+	public static void updateDataStore(String logFile, Relation r, int populationIdx) throws FileNotFoundException, IOException {
 		BufferedReader br = null;
 		String line = "";
 		int hashKey;
@@ -21,7 +21,7 @@ public class ApplyLogsToStore {
 		byte[] oldTuple;
 
 		try {
-			br = new BufferedReader(new FileReader(csvLogFile));
+			br = new BufferedReader(new FileReader(logFile));
 			while ( (line = br.readLine()) != null) {
 				String[] tokens = line.split(",");
 				if (!tokens[0].equals("COMMIT")) {
